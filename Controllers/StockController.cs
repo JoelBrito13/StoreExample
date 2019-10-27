@@ -31,12 +31,11 @@ namespace StoreExample.Controllers
         
         [HttpGet]
         [Route("getProduct")]
-        public async Task <ActionResult> getProduct(int productIdx){
+        public ActionResult getProduct(int productIdx){
             try
             {
-                var task = Task.Run(()=> StockServices.getProduct(productIdx));
-                await task;
-                return Ok(task.Result);
+                Ok(StockServices.getProduct(productIdx));
+                return Ok();
             }
             catch (Exception ex){
                 return BadRequest(ex);
@@ -45,11 +44,9 @@ namespace StoreExample.Controllers
 
         [HttpGet]
         [Route("SearchProduct")]
-        public async Task <ActionResult> SearchProduct(string product){
+        public ActionResult SearchProduct(string product){
             try {
-                var task = Task.Run(()=>StockServices.searchProduct(product));
-                await task;
-                return Ok(task.Result);
+                return Ok(StockServices.searchProduct(product));
             }
             catch (Exception ex){
                 return BadRequest(ex);
@@ -58,11 +55,9 @@ namespace StoreExample.Controllers
        
         [HttpGet]
         [Route("GetProducts")]
-        public async Task <ActionResult> GetProducts(){
-            try {                
-                var task = Task.Run(()=>StockServices.listAllProducts());
-                await task;
-                return Ok(task.Result);
+        public ActionResult GetProducts(){
+            try {
+                return Ok(StockServices.listAllProducts());
             }
             catch (Exception ex){
                 return BadRequest(ex);
@@ -71,11 +66,9 @@ namespace StoreExample.Controllers
         
         [HttpGet]
         [Route("listProductByCategory")]
-        public async Task <ActionResult> listProductByCategory(int categoryIdx){
+        public ActionResult listProductByCategory(int categoryIdx){
             try {
-                var task = Task.Run(()=>StockServices.listProductByCategory(categoryIdx));
-                await task;
-                return Ok(task.Result);
+                return Ok(StockServices.listProductByCategory(categoryIdx));
             }
             catch (Exception ex){
                 return BadRequest(ex);
@@ -84,11 +77,9 @@ namespace StoreExample.Controllers
         
         [HttpPost]
         [Route("AddProduct")]
-        public async Task <ActionResult> AddProduct([FromBody]Product product){
+        public ActionResult AddProduct([FromBody]Product product){
             try {
-                var task = Task.Run(()=>StockServices.addProduct(product));
-                await task;
-                return Ok(task.Result);
+                return Ok(StockServices.addProduct(product));
             }
             catch (Exception ex){
                 return BadRequest(ex);
@@ -97,11 +88,9 @@ namespace StoreExample.Controllers
         
         [HttpPut]
         [Route("UpdateProduct")]
-        public async Task <ActionResult> UpdateProduct([FromBody]Product product){
+        public ActionResult UpdateProduct([FromBody]Product product){
             try {
-                var task = Task.Run(()=>StockServices.updateProduct(product));
-                await task;
-                return Ok(task.Result);
+                return Ok(StockServices.updateProduct(product));
             }
             catch (Exception ex){
                 return BadRequest(ex);
@@ -110,11 +99,9 @@ namespace StoreExample.Controllers
         
         [HttpDelete]
         [Route("removeProduct")]
-        public async Task <ActionResult> removeProduct(int productIdx){
+        public ActionResult removeProduct(int productIdx){
             try {
-                var task = Task.Run(()=>StockServices.removeProduct(productIdx));
-                await task;
-                return Ok(task.Result);
+                return Ok(StockServices.removeProduct(productIdx));
             }
             catch (Exception ex){
                 return BadRequest(ex);
@@ -123,11 +110,9 @@ namespace StoreExample.Controllers
 
         [HttpGet]
         [Route("GetCategory")]
-        public async Task <ActionResult> GetCategory(int categoryIdx){
+        public ActionResult GetCategory(int categoryIdx){
             try {
-                var task = Task.Run(()=>StockServices.getCategory(categoryIdx));
-                await task;
-                return Ok(task.Result);
+                return Ok(StockServices.getCategory(categoryIdx));
             }
             catch (Exception ex){
                 return BadRequest(ex);
@@ -136,11 +121,9 @@ namespace StoreExample.Controllers
 
         [HttpGet]
         [Route("SearchCategory")]
-        public async Task <ActionResult> SearchCategory(string category){
+        public ActionResult SearchCategory(string category){
             try {
-                var task = Task.Run(()=>StockServices.searchCategory(category));
-                await task;
-                return Ok(task.Result);
+                return Ok(StockServices.searchCategory(category));
             }
             catch (Exception ex){
                 return BadRequest(ex);
@@ -149,11 +132,9 @@ namespace StoreExample.Controllers
         
         [HttpGet]
         [Route("GetCategories")]
-        public async Task <ActionResult> GetCategories(){
+        public ActionResult GetCategories(){
             try {
-                var task = Task.Run(()=>StockServices.listAllCategories());
-                await task;
-                return Ok(task.Result);
+                return Ok(StockServices.listAllCategories());
             }
             catch (Exception ex){
                 return BadRequest(ex);
@@ -162,11 +143,9 @@ namespace StoreExample.Controllers
         
         [HttpPost]
         [Route("AddCategory")]
-        public async Task <ActionResult> AddCategory([FromBody]Category category){
+        public ActionResult AddCategory([FromBody]Category category){
             try {
-                var task = Task.Run(()=>StockServices.addCategory(category));
-                await task;
-                return Ok(task.Result);
+                return Ok(StockServices.addCategory(category));
             }
             catch (Exception ex){
                 return BadRequest(ex);
@@ -175,11 +154,9 @@ namespace StoreExample.Controllers
         
         [HttpPut]
         [Route("UpdateCategory")]
-        public async Task <ActionResult> UpdateCategory([FromBody]ICategory category){
+        public ActionResult UpdateCategory([FromBody]ICategory category){
             try {
-                var task = Task.Run(()=>StockServices.updateCategory(category));
-                await task;
-                return Ok(task.Result);
+                return Ok(StockServices.updateCategory(category));
             }
             catch (Exception ex){
                 return BadRequest(ex);
@@ -188,11 +165,9 @@ namespace StoreExample.Controllers
         
         [HttpDelete]
         [Route("RemoveCategory")]
-        public async Task <ActionResult> RemoveCategory(int categoryIdx){
+        public ActionResult RemoveCategory(int categoryIdx){
             try {
-                var task = Task.Run(()=>StockServices.removeCategory(categoryIdx));
-                await task;
-                return Ok(task.Result);
+                return Ok(StockServices.removeCategory(categoryIdx));
             }
             catch (Exception ex){
                 return BadRequest(ex);
