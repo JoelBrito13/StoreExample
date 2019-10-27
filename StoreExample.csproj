@@ -1,0 +1,41 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>netcoreapp2.2</TargetFramework>
+        <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="FluentEvents.EntityFramework" Version="2.7.2" />
+        <PackageReference Include="Microsoft.AspNetCore.App" />
+        <PackageReference Include="Microsoft.Data.SqlClient" Version="1.1.0-preview1.19275.1" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.2.2" />
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="5.0.0-rc4" />
+      
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Remove="Interfaces\StockService.cs" />
+      <Compile Remove="Controllers\HomeControler.cs" />
+      <Compile Remove="Interfaces\IStoreContext.cs" />
+      <Compile Remove="Modules\ProductCategory.cs" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <_ContentIncludedByDefault Remove="StoreApplication\Views\Home\Index.cshtml" />
+      <_ContentIncludedByDefault Remove="StoreApplication\Views\Home\Privacy.cshtml" />
+      <_ContentIncludedByDefault Remove="StoreApplication\Views\Shared\Error.cshtml" />
+      <_ContentIncludedByDefault Remove="StoreApplication\Views\Shared\_CookieConsentPartial.cshtml" />
+      <_ContentIncludedByDefault Remove="StoreApplication\Views\Shared\_Layout.cshtml" />
+      <_ContentIncludedByDefault Remove="StoreApplication\Views\Shared\_ValidationScriptsPartial.cshtml" />
+      <_ContentIncludedByDefault Remove="StoreApplication\Views\_ViewImports.cshtml" />
+      <_ContentIncludedByDefault Remove="StoreApplication\Views\_ViewStart.cshtml" />
+      <_ContentIncludedByDefault Remove="StoreApplication\appsettings.Development.json" />
+      <_ContentIncludedByDefault Remove="StoreApplication\appsettings.json" />
+      <_ContentIncludedByDefault Remove="StoreApplication\obj\project.assets.json" />
+      <_ContentIncludedByDefault Remove="StoreApplication\obj\project.packagespec.json" />
+      <_ContentIncludedByDefault Remove="StoreApplication\obj\StoreApplication.csproj.nuget.dgspec.json" />
+      <_ContentIncludedByDefault Remove="StoreApplication\Properties\launchSettings.json" />
+    </ItemGroup>
+
+</Project>
