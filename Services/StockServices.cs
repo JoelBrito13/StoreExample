@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using StoreExample.Interfaces;
 using StoreExample.Modules.Category;
 using StoreExample.Modules.Product;
@@ -16,41 +18,118 @@ namespace StoreExample.Services
             UnitOfWork = unitOfWork ??
                          throw new ArgumentNullException(nameof(unitOfWork), "Fail to Start UnitOfWorks");
         }
-
-        public IProduct getProduct(int idx)
+        
+        
+        
+        //                  Categories
+        public async Task<ICategory> GetCategoryAsync(int idx)
         {
-            var product = UnitOfWork.Products.Get(idx);
-            product.Category = (Category) getCategory(product.CategoryIdx);
-            return product;
+            return await UnitOfWork.Categories.GetAsync(idx);
         }
 
-        public IProduct addProduct(Product product)
+        public async Task<ICategory> AddCategory(Category category)
         {
-            if (!UnitOfWork.Categories.Exists(product.CategoryIdx) )throw new Exception("Product Category is not Listed")
-                ;
             try
             {
-                UnitOfWork.BeginTransaction();
-                UnitOfWork.Products.Add(product);
-                UnitOfWork.SaveChanges();
+                await UnitOfWork.BeginTransactionAsync();
+                await UnitOfWork.Categories.AddAsync(category);
+                await UnitOfWork.SaveChangesAsync();
                 UnitOfWork.Commit();
             }
-            catch(Exception ex)
+            catch
             {
                 UnitOfWork.Rollback();
-                throw ex;
+                throw;
+            }
+            return category;
+        }
+
+        public async Task<ICategory> UpdateCategoryAsync(Category category)
+        {
+            Category actualCategory = (Category)await GetCategoryAsync(category.Idx);
+            try
+            {                
+                actualCategory.Name = category.Name;
+                await UnitOfWork.BeginTransactionAsync();
+                UnitOfWork.Categories.Update(actualCategory);
+
+                await UnitOfWork.SaveChangesAsync();
+                UnitOfWork.Commit();
+            }
+            catch
+            {
+                UnitOfWork.Rollback();
+                throw;
+            }
+            return actualCategory;
+        }
+
+        public async Task<ICategory> RemoveCategoryAsync(int idx)
+        {
+            Category category = (Category) await GetCategoryAsync(idx); 
+            try
+            {                
+                await UnitOfWork.BeginTransactionAsync();
+                UnitOfWork.Categories.Remove(category);
+
+                await UnitOfWork.SaveChangesAsync();
+                UnitOfWork.Commit();
+            }
+            catch
+            {
+                UnitOfWork.Rollback();
+                throw;
+            }
+            return new NullCategory();
+        }
+
+        public async Task<ICategory> SearchCategoryAsync(string name)
+        {
+            return await UnitOfWork.Categories.GetManyQueryable(u => u.Name == name).FirstOrDefaultAsync();
+        }
+
+        public async Task<List<ICategory>> ListAllCategoriesAsync()
+        {
+            return new List<ICategory>(await UnitOfWork.Categories.GetAllAsync());
+        }
+        
+        //                  Products
+        
+        public async Task<IProduct> GetProductAsync(int idx)
+        {
+            IProduct product = await UnitOfWork.Products.GetAsync(idx);
+            product.Category = (Category) await GetCategoryAsync(product.CategoryIdx);
+            return product;
+        }
+    
+        public async Task<IProduct> AddProductAsync(Product product)
+        {
+            if (!await UnitOfWork.Categories.ExistsAsync(product.CategoryIdx) )throw new Exception("Product Category is not Listed")
+                ;
+            try
+            {
+                
+                await UnitOfWork.BeginTransactionAsync();
+                await UnitOfWork.Products.AddAsync(product);
+                await UnitOfWork.SaveChangesAsync();
+                UnitOfWork.Commit();
+            }
+            catch
+            {
+                UnitOfWork.Rollback();
+                throw;
             }
             return product;
         }
 
-        public IProduct updateProduct(Product product)
+        public async Task<IProduct> UpdateProduct(Product product)
         {
-            if (!UnitOfWork.Categories.Exists(product.CategoryIdx) )throw new Exception("Product Category is not Listed")
+            if (! await UnitOfWork.Categories.ExistsAsync(product.CategoryIdx) )throw new Exception("Product Category is not Listed")
                 ;
-            Product actualProduct = (Product)getProduct(product.Idx);
+            Product actualProduct = (Product) await GetProductAsync(product.Idx);
             try
             {                
-                UnitOfWork.BeginTransaction();
+                await UnitOfWork.BeginTransactionAsync();
                 
                 actualProduct.Name = product.Name;
                 actualProduct.Price = product.Price;
@@ -58,132 +137,60 @@ namespace StoreExample.Services
                 
                 UnitOfWork.Products.Update(actualProduct);
 
-                UnitOfWork.SaveChanges();
+                await UnitOfWork.SaveChangesAsync();
                 UnitOfWork.Commit();
             }
-            catch (Exception ex)
+            catch
             {
                 UnitOfWork.Rollback();
-                throw ex;
+                throw;
             }
             return actualProduct;
         }
 
-        public IProduct removeProduct(int idx)
+        public async Task<IProduct> RemoveProduct(int idx)
         {
-            Product product = (Product) getProduct(idx); 
+            Product product = (Product) await GetProductAsync(idx); 
             try
             {                
-                UnitOfWork.BeginTransaction();
+                await UnitOfWork.BeginTransactionAsync();
                 UnitOfWork.Products.Remove(product);
 
-                UnitOfWork.SaveChanges();
+                await UnitOfWork.SaveChangesAsync();
                 UnitOfWork.Commit();
             }
-            catch (Exception ex)
+            catch
             {
                 UnitOfWork.Rollback();
-                throw ex;
+                throw;
             }
-            return product;
+            return new NullProduct();
         }
 
-        public IProduct searchProduct(string name)
+        public async Task<IProduct> SearchProductAsync(string name)
         {
-            return UnitOfWork.Products.GetManyQueryable(u => u.Name == name).FirstOrDefault();
+            return await UnitOfWork.Products.GetManyQueryable(u => u.Name == name).FirstOrDefaultAsync();
         }
 
-        public List<IProduct> listAllProducts()
+        public async Task<List<IProduct>> ListAllProducts()
         {
-            var listCategories = listAllCategories();
-            List<IProduct> listProducts = new List<IProduct>(UnitOfWork.Products.GetAll().ToList());
+            var listCategories = await ListAllCategoriesAsync();
+            List<Product> listProducts = new List<Product>(await UnitOfWork.Products.GetAllAsync());
             listProducts.ForEach(
                 p => p.Category = (Category) listCategories.FirstOrDefault(
                     c => c.Idx == p.CategoryIdx));
-            return listProducts;
-
+            return new List<IProduct>(listProducts);
         }
 
-        public List<Product> listProductByCategory(int categoryIdx)
-        {   ICategory category = getCategory(categoryIdx);
+        public async Task<List<IProduct>> ListProductByCategory(int categoryIdx)
+        {   Category category = (Category) await GetCategoryAsync(categoryIdx);
             if (category == null )throw new Exception("Category is not Listed")
             ;
-            List<Product> listProduct = (List<Product>) UnitOfWork.Products.GetMany(u => u.CategoryIdx == categoryIdx) ;
+            List<Product> listProduct = (List<Product>) await UnitOfWork.Products.GetManyAsync(u => u.CategoryIdx == categoryIdx) ;
            
-            listProduct.ForEach(u => u.Category = (Category)category);
+            listProduct.ForEach(u => u.Category = category);
            
-            return listProduct;
+            return new List<IProduct>(listProduct);
         }
-        public ICategory getCategory(int idx)
-        {
-            return UnitOfWork.Categories.Get(idx);
-        }
-
-        public ICategory addCategory(Category category)
-        {
-            try
-            {
-                UnitOfWork.BeginTransaction();
-                UnitOfWork.Categories.Add(category);
-                UnitOfWork.SaveChanges();
-                UnitOfWork.Commit();
-            }
-            catch(Exception ex)
-            {
-                UnitOfWork.Rollback();
-                throw ex;
-            }
-            return category;
-        }
-
-        public ICategory updateCategory(ICategory category)
-        {
-            Category actualCategory = (Category)getCategory(category.Idx);
-            try
-            {                
-                actualCategory.Name = category.Name;
-                UnitOfWork.BeginTransaction();
-                UnitOfWork.Categories.Update(actualCategory);
-
-                UnitOfWork.SaveChanges();
-                UnitOfWork.Commit();
-            }
-            catch (Exception ex)
-            {
-                UnitOfWork.Rollback();
-                throw ex;
-            }
-            return category;
-        }
-
-        public ICategory removeCategory(int idx)
-        {
-            Category category = (Category) getCategory(idx); 
-            try
-            {                
-                UnitOfWork.BeginTransaction();
-                UnitOfWork.Categories.Remove(category);
-
-                UnitOfWork.SaveChanges();
-                UnitOfWork.Commit();
-            }
-            catch (Exception ex)
-            {
-                UnitOfWork.Rollback();
-                throw ex;
-            }
-            return category;
-        }
-
-        public ICategory searchCategory(string name)
-        {
-            return UnitOfWork.Categories.GetManyQueryable(u => u.Name == name).FirstOrDefault();
-        }
-
-        public List<ICategory> listAllCategories()
-        {
-            return new List<ICategory>(UnitOfWork.Categories.GetAll());
-        }
-        
     }
 }

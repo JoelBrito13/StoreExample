@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using StoreExample.Interfaces;
 using StoreExample.Modules.Category;
 using StoreExample.Modules.Product;
 using StoreExample.Services;
@@ -15,104 +12,19 @@ namespace StoreExample.Controllers
     public class StockController : ControllerBase
     {
         private readonly IStockServices StockServices;
-        
-        /*protected readonly IAppServices AppServices;
-        protected readonly IUnitOfWork UnitOfWork;
-        */
         public StockController(IStockServices stockServices) {
             StockServices = stockServices ?? throw new ArgumentNullException(nameof(stockServices), "Invalid Entry Service");
         }
-        /*public StockController(IAppServices appServices, IUnitOfWork unitOfWork, IStockServices stockServices) {
-            AppServices = appServices ?? throw new ArgumentNullException(nameof(appServices), "Invalid Application Service");
-            UnitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork), "Invalid Unit of Work");
-            StockServices = stockServices ?? throw new ArgumentNullException(nameof(stockServices), "Invalid Entry Service");
-        }
-        */
         
-        [HttpGet]
-        [Route("getProduct")]
-        public ActionResult getProduct(int productIdx){
-            try
-            {
-                Ok(StockServices.getProduct(productIdx));
-                return Ok();
-            }
-            catch (Exception ex){
-                return BadRequest(ex);
-            }
-        }
-
-        [HttpGet]
-        [Route("SearchProduct")]
-        public ActionResult SearchProduct(string product){
-            try {
-                return Ok(StockServices.searchProduct(product));
-            }
-            catch (Exception ex){
-                return BadRequest(ex);
-            }
-        }
-       
-        [HttpGet]
-        [Route("GetProducts")]
-        public ActionResult GetProducts(){
-            try {
-                return Ok(StockServices.listAllProducts());
-            }
-            catch (Exception ex){
-                return BadRequest(ex);
-            }
-        }
+        //Categories
         
-        [HttpGet]
-        [Route("listProductByCategory")]
-        public ActionResult listProductByCategory(int categoryIdx){
-            try {
-                return Ok(StockServices.listProductByCategory(categoryIdx));
-            }
-            catch (Exception ex){
-                return BadRequest(ex);
-            }
-        }        
-        
-        [HttpPost]
-        [Route("AddProduct")]
-        public ActionResult AddProduct([FromBody]Product product){
-            try {
-                return Ok(StockServices.addProduct(product));
-            }
-            catch (Exception ex){
-                return BadRequest(ex);
-            }
-        }
-        
-        [HttpPut]
-        [Route("UpdateProduct")]
-        public ActionResult UpdateProduct([FromBody]Product product){
-            try {
-                return Ok(StockServices.updateProduct(product));
-            }
-            catch (Exception ex){
-                return BadRequest(ex);
-            }
-        }
-        
-        [HttpDelete]
-        [Route("removeProduct")]
-        public ActionResult removeProduct(int productIdx){
-            try {
-                return Ok(StockServices.removeProduct(productIdx));
-            }
-            catch (Exception ex){
-                return BadRequest(ex);
-            }
-        }
-
         [HttpGet]
         [Route("GetCategory")]
-        public ActionResult GetCategory(int categoryIdx){
+        public async Task <ActionResult> GetCategory(int categoryIdx){
             try {
-                return Ok(StockServices.getCategory(categoryIdx));
+                var task = Task.Run(()=>StockServices.GetCategoryAsync(categoryIdx));
+                await task;
+                return Ok(task.Result);
             }
             catch (Exception ex){
                 return BadRequest(ex);
@@ -121,58 +33,166 @@ namespace StoreExample.Controllers
 
         [HttpGet]
         [Route("SearchCategory")]
-        public ActionResult SearchCategory(string category){
+        public async Task <ActionResult> SearchCategory(string category){
             try {
-                return Ok(StockServices.searchCategory(category));
+                var task = Task.Run(()=>StockServices.SearchCategoryAsync(category));
+                await task;
+                return Ok(task.Result);
             }
             catch (Exception ex){
                 return BadRequest(ex);
             }
         } 
-        
+
         [HttpGet]
-        [Route("GetCategories")]
-        public ActionResult GetCategories(){
+        [Route("ListCategories")]
+        public async Task <ActionResult> ListCategories(){
             try {
-                return Ok(StockServices.listAllCategories());
+                var task = Task.Run(()=>StockServices.ListAllCategoriesAsync());
+                await task;
+                return Ok(task.Result);
             }
             catch (Exception ex){
                 return BadRequest(ex);
             }
         }
-        
+
         [HttpPost]
         [Route("AddCategory")]
-        public ActionResult AddCategory([FromBody]Category category){
+        public async Task <ActionResult> AddCategory([FromBody]Category category){
             try {
-                return Ok(StockServices.addCategory(category));
+                var task = Task.Run(()=>StockServices.AddCategory(category));
+                await task;
+                return Ok(task.Result);
             }
             catch (Exception ex){
                 return BadRequest(ex);
             }
         }
-        
+
         [HttpPut]
         [Route("UpdateCategory")]
-        public ActionResult UpdateCategory([FromBody]ICategory category){
+        public async Task <ActionResult> UpdateCategory([FromBody]Category category){
             try {
-                return Ok(StockServices.updateCategory(category));
+                var task = Task.Run(()=> StockServices.UpdateCategoryAsync(category));
+                await task;
+                return Ok(task.Result);
             }
             catch (Exception ex){
                 return BadRequest(ex);
             }
         }
-        
+
         [HttpDelete]
         [Route("RemoveCategory")]
-        public ActionResult RemoveCategory(int categoryIdx){
+        public async Task <ActionResult> RemoveCategory(int categoryIdx){
             try {
-                return Ok(StockServices.removeCategory(categoryIdx));
+                var task = Task.Run(()=>StockServices.RemoveCategoryAsync(categoryIdx));
+                await task;
+                return Ok(task.Result);
             }
             catch (Exception ex){
                 return BadRequest(ex);
             }
         }
         
+        
+        //Products
+        
+        
+        
+        [HttpGet]
+        [Route("getProduct")]
+        public async Task <ActionResult> getProduct(int productIdx){
+            try
+            {
+                var task = Task.Run(()=> StockServices.GetProductAsync(productIdx));
+                await task;
+                return Ok(task.Result);
+            }
+            catch (Exception ex){
+                return BadRequest(ex);
+            }
+        }
+
+        [HttpGet]
+        [Route("SearchProduct")]
+        public async Task <ActionResult> SearchProduct(string product){
+            try {
+                var task = Task.Run(()=>StockServices.SearchProductAsync(product));
+                await task;
+                return Ok(task.Result);
+            }
+            catch (Exception ex){
+                return BadRequest(ex);
+            }
+        }
+
+        [HttpGet]
+        [Route("ListProducts")]
+        public async Task <ActionResult> ListProducts(){
+            try {                
+                var task = Task.Run(()=>StockServices.ListAllProducts());
+                await task;
+                return Ok(task.Result);
+            }
+            catch (Exception ex){
+                return BadRequest(ex);
+            }
+        }
+
+        [HttpGet]
+        [Route("listProductByCategory")]
+        public async Task <ActionResult> listProductByCategory(int categoryIdx){
+            try {
+                var task = Task.Run(()=>StockServices.ListProductByCategory(categoryIdx));
+                await task;
+                return Ok(task.Result);
+            }
+            catch (Exception ex){
+                return BadRequest(ex);
+            }
+        }        
+
+        [HttpPost]
+        [Route("AddProduct")]
+        public async Task <ActionResult> AddProduct([FromBody]Product product){
+            try {
+                var task = Task.Run(()=>StockServices.AddProductAsync(product));
+                await task;
+                return Ok(task.Result);
+            }
+            catch (Exception ex){
+                return BadRequest(ex);
+            }
+        }
+
+        [HttpPut]
+        [Route("UpdateProduct")]
+        public async Task <ActionResult> UpdateProduct([FromBody]Product product){
+            try {
+                var task = Task.Run(()=>StockServices.UpdateProduct(product));
+                await task;
+                return Ok(task.Result);
+            }
+            catch (Exception ex){
+                return BadRequest(ex);
+            }
+        }
+
+        [HttpDelete]
+        [Route("removeProduct")]
+        public async Task <ActionResult> removeProduct(int productIdx){
+            try {
+                var task = Task.Run(()=>StockServices.RemoveProduct(productIdx));
+                await task;
+                return Ok(task.Result);
+            }
+            catch (Exception ex){
+                return BadRequest(ex);
+            }
+        }
+
+        
     }
-}
+} 

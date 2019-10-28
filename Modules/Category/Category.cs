@@ -1,5 +1,4 @@
-﻿
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace StoreExample.Modules.Category
 {
@@ -9,7 +8,9 @@ namespace StoreExample.Modules.Category
         public virtual int Idx { get; set; }
         [Required(ErrorMessage = "Category Name is Required")]
         public virtual string Name { get; set; }
-        
-        public Category(){}
+
+        protected Category(){}
     }
+    public class NullCategory : Category
+    {} 
 }

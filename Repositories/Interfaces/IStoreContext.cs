@@ -4,10 +4,12 @@ using StoreExample.Modules.Product;
 
 namespace StoreExample.Interfaces
 {
+/*
     public class IStoreContext : DbContext
     {
-        DbSet<Product> Products { get; set; }
-        DbSet<Category> Categories { get; set; }
+        private DbSet<Product> Products { get; set; }
+        private DbSet<Category> Categories { get; set; }
         
     }
+*/
 }

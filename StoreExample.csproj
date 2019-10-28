@@ -19,6 +19,10 @@
       <Compile Remove="Controllers\HomeControler.cs" />
       <Compile Remove="Interfaces\IStoreContext.cs" />
       <Compile Remove="Modules\ProductCategory.cs" />
+      <Compile Remove="Repositories\AppServices.cs" />
+      <Compile Remove="Interfaces\IAppServices.cs" />
+      <Compile Remove="Repositories\Interfaces\StockService.cs" />
+      <Compile Remove="Repositories\Interfaces\IStoreContext.cs" />
     </ItemGroup>
 
     <ItemGroup>

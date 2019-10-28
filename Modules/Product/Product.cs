@@ -7,19 +7,25 @@ namespace StoreExample.Modules.Product
         [Key]
         public virtual int Idx { get; set; }
 
-        [Required(ErrorMessage = "Product Price is Required")]
-        public virtual double Price { get; set; }
+        public virtual double? Price { get; set; }
 
         [Required(ErrorMessage = "Product Category is Required")]
         public virtual int CategoryIdx { get; set; }
 
         [Required(ErrorMessage = "Product Name is Required")] 
         public virtual string Name { get; set; }
-        
         public virtual Category.Category Category { get; set; }
-
-        
-        public Product(){}
+        protected Product(){}
     }
-    
+
+    public sealed class NullProduct : Product
+    {
+        public NullProduct()
+        {
+            Idx = 0;
+            Name = null;
+            Price = null;
+            CategoryIdx = 0;
+        }
+    }
 }

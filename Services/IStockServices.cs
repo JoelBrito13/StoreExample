@@ -1,26 +1,27 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
+using System.Threading.Tasks;
 using StoreExample.Modules.Category;
 using StoreExample.Modules.Product;
 
 namespace StoreExample.Services
 {
     public interface IStockServices
-    {
-        IProduct getProduct(int idx);
-        IProduct addProduct(Product product);
-        IProduct updateProduct(Product product);
-        IProduct removeProduct(int idx);
-        IProduct searchProduct(string name);
-        List<IProduct> listAllProducts();
-        List<Product> listProductByCategory(int categoryIdx);
-
+    { 
+        //Categories
+        Task<ICategory> GetCategoryAsync(int idx);
+        Task<ICategory> AddCategory(Category category);
+        Task<ICategory> UpdateCategoryAsync(Category category);
+        Task<ICategory> RemoveCategoryAsync(int idx);
+        Task<ICategory> SearchCategoryAsync(string name);
+        Task<List<ICategory>> ListAllCategoriesAsync();
         
-        ICategory getCategory(int idx);
-        ICategory addCategory(Category category);
-        ICategory updateCategory(ICategory category);
-        ICategory removeCategory(int idx);
-        ICategory searchCategory(string name);
-        List<ICategory> listAllCategories();
+        //Products
+        Task<IProduct> GetProductAsync(int idx);
+        Task<IProduct> AddProductAsync(Product product);
+        Task<IProduct> UpdateProduct(Product product);
+        Task<IProduct> RemoveProduct(int idx);
+        Task<IProduct> SearchProductAsync(string name);
+        Task<List<IProduct>> ListAllProducts();
+        Task<List<IProduct>> ListProductByCategory(int categoryIdx);
     }
 }

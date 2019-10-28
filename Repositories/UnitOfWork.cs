@@ -1,6 +1,7 @@
 ﻿using System;
-using Microsoft.AspNetCore.Http;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using StoreExample.Interfaces;
 using StoreExample.Modules.Category;
 using StoreExample.Modules.Product;
@@ -12,8 +13,8 @@ namespace StoreExample.Repositories
             #region // Atributes //
             private readonly DbContext Context;
 
-            private Repository<Category> _Categories;
-            private Repository<Product> _Products;
+            private RepositoryAsync<Category> _categories;
+            private RepositoryAsync<Product> _products;
 
             //public DbContext Context => _Context ?? (_Context = Context.st);
             #endregion
@@ -22,15 +23,17 @@ namespace StoreExample.Repositories
                 Context = context ?? throw new ArgumentNullException(nameof(context), "Invalid Entry Context");
             }
             
-            public IRepository<Category> Categories  => _Categories ?? (_Categories = new Repository<Category>(Context));            
-            public IRepository<Product> Products  => _Products ?? (_Products = new Repository<Product>(Context));
+            public IRepositoryAsync<Category> Categories  => 
+                _categories ?? (_categories = new RepositoryAsync<Category>(Context));            
+            public IRepositoryAsync<Product> Products  => 
+                _products ?? (_products = new RepositoryAsync<Product>(Context));
 
-            public void SaveChanges() {
-                Context.SaveChanges();
+            public async Task<int> SaveChangesAsync() {
+                return await Context.SaveChangesAsync();
             }
 
-            public void BeginTransaction() {
-                Context.Database.BeginTransaction();
+            public async Task<IDbContextTransaction> BeginTransactionAsync() {
+               return await Context.Database.BeginTransactionAsync();
             }
 
             public void Commit() {

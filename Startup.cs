@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Swashbuckle.AspNetCore.Swagger;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -35,7 +29,6 @@ namespace StoreExample
 
             services.AddDbContext<StoreContext>(options => options.UseSqlServer(connectionString));
             services
-                .AddSingleton<IAppServices, AppServices>()
                 .AddTransient<IUnitOfWork, UnitOfWork>()
                 .AddScoped<IStockServices, StockServices>();
 
