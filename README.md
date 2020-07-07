@@ -5,7 +5,7 @@ Exemple of RESTFul API using:
 * UnitOfWorks + Repository. 
 * SQL Server
 
-## All the Methods should be Testing using the termination URL: _/swagger/index.html_ 
+All the Methods should be Testing using the termination URL: _/swagger/index.html_ 
 
 **To test in your local environment, just change the _ConnectionStrings_ inside the _appsettings.json_ to receive the DataBase**
 
