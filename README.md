@@ -1,5 +1,5 @@
 # StoreExample
-Exemple of RESTFul API using: 
+Exemple of RESTFul API written in ASP.NET Core 2.2 using: 
 * Async Verbs 
 * Entity Framework
 * UnitOfWorks + Repository. 
@@ -7,7 +7,7 @@ Exemple of RESTFul API using:
 
 All the Methods should be Testing using the termination URL: _/swagger/index.html_ 
 
-**To test in your local environment, just change the _ConnectionStrings_ inside the _appsettings.json_ to receive the DataBase**
+To test in your local environment, just change the _ConnectionStrings_ inside the _appsettings.json_ to receive the DataBase
 
   # Example of Database Creation
 
