@@ -1,15 +1,17 @@
 # StoreExample
-Exemple of Async Verbs Using Entity Framework with the working patterns UnitOfWorks and Repository. 
-The choosen DataBase Server is SQL Server#
+Exemple of RESTFul API using: 
+* Async Verbs 
+* Entity Framework
+* UnitOfWorks + Repository. 
+* SQL Server
 
-##All the Methods should be Testing using the termination URL: _/swagger/index.html_ ##
+## All the Methods should be Testing using the termination URL: _/swagger/index.html_ 
 
 **To test in your local environment, just change the _ConnectionStrings_ inside the _appsettings.json_ to receive the DataBase**
 
+  # Example of Database Creation
 
-  #Example of Database Creation#
-
-##
+```console
 	CREATE DATABASE demo;
 	USE demo; ***
 
@@ -33,4 +35,9 @@ The choosen DataBase Server is SQL Server#
 
 	SELECT * FROM Category;
 	SELECT * FROM Product;
-##
+```
+
+# Credits
+Repository Patern + UnitOfWor: https://www.programmingwithwolfgang.com/repository-and-unit-of-work-pattern/
+
+
