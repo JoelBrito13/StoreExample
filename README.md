@@ -1,5 +1,5 @@
 # StoreExample
-Exemple of RESTFul API written in ASP.NET Core 2.2 using: 
+Example of RESTFul API written in ASP.NET Core 2.2 using: 
 * Async Verbs 
 * Entity Framework
 * UnitOfWorks + Repository. 
